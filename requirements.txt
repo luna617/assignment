@@ -1,0 +1,5 @@
+fastapi
+llama_cpp_python
+transformers
+pydantic
+fastapi
