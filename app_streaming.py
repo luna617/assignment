@@ -14,9 +14,6 @@ class GenerationRequest(BaseModel):
     max_tokens: float | None = 1000
     top_p: float | None = 0.1
 
-# echo = False
-# stop = ["Q", "\n"]
-
 
 instruct_model = Llama(model_path=r"<MODEL-PATH>")
 
@@ -27,7 +24,6 @@ app = FastAPI()
 @app.post("/summarize")
 async def summarize(generation_request: GenerationRequest):
     translated_text = await asyncify(translate)(generation_request.text, src_lang='heb_Hebr', tgt_lang='eng_Latn')
-    # translated_text = translate(generation_request.text, src_lang='heb_Hebr', tgt_lang='eng_Latn')
     print("Finished translating")
 
     generation_request = {
