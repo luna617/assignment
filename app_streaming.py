@@ -15,9 +15,9 @@ class GenerationRequest(BaseModel):
     top_p: float | None = 0.1
 
 
-instruct_model = Llama(model_path=r"<MODEL-PATH>")
+instruct_model = Llama(model_path=r"C:\Users\GH6738\models\Phi-3-mini-4k-instruct\Phi-3-mini-4k-instruct-F16.gguf")
 
-translation_model = pipeline("translation", model=r"<MODEL-PATH>", max_length=1000)
+translation_model = pipeline("translation", model=r"C:\Users\GH6738\models\nllb-200-distilled-600M", max_length=1000)
 app = FastAPI()
 
 
