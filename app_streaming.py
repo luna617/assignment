@@ -32,7 +32,7 @@ async def summarize(message: Message):
     return StreamingResponse(five_points_summary(message), media_type='text/event-stream')
 
 
-async def translate(text: str, src_lang: str, tgt_lang: str):
+def translate(text: str, src_lang: str, tgt_lang: str):
     res = translation_model(text, src_lang=src_lang, tgt_lang=tgt_lang)[0]["translation_text"]
     return res
 
