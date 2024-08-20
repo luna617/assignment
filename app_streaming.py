@@ -57,7 +57,7 @@ async def five_points_summary(message: Message):
         if 'content' in delta:
             current_line += delta['content']
             if delta['content'] == '\n':
-                translated_current_line = await translate(current_line, src_lang='eng_Latn', tgt_lang='heb_Hebr')
+                translated_current_line = translate(current_line, src_lang='eng_Latn', tgt_lang='heb_Hebr')
                 # print(translated_current_line)
                 yield translated_current_line
                 current_line = ""
