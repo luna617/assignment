@@ -26,15 +26,10 @@ async def summarize(generation_request: GenerationRequest):
     translated_text = await asyncify(translate)(generation_request.text, src_lang='heb_Hebr', tgt_lang='eng_Latn')
     print("Finished translating")
 
-    generation_request = {
-        "text": f"Consider the following text: {translated_text}.\nA 5 points summary for the text is: ",
-        "temperature": generation_request.temperature,
-        "max_tokens": generation_request.max_tokens,
-        "top_p": generation_request.top_p
-    }
+    new_generation_request = generation_request.model_copy()
+    new_generation_request.text = f"Consider the following text: {translated_text}.\nA 5 points summary for the text is: "
 
-    generation_request = GenerationRequest(**generation_request)
-    return StreamingResponse(five_points_summary(generation_request), media_type='text/event-stream')
+    return StreamingResponse(five_points_summary(new_generation_request), media_type='text/event-stream')
 
 
 def translate(text: str, src_lang: str, tgt_lang: str):
@@ -60,17 +55,20 @@ async def five_points_summary(generation_request: GenerationRequest):
     for chunk in res:
         delta = chunk['choices'][0]['delta']
         if 'content' in delta:
-            current_line += delta['content']
-            print(delta['content'])
-            if delta['content'].endswith('\n'):
+            if '\n' in delta['content']:  # handling \n in a part of chunk
+
+                parts = delta['content'].split('\n')
+                current_line += parts[0]
                 translated_current_line = await asyncify(translate)(current_line, src_lang='eng_Latn', tgt_lang='heb_Hebr')
                 print(translated_current_line)
-                yield translated_current_line
-                current_line = ""
+                yield f"data: {translated_current_line}"
+                current_line = parts[1]
+            else:
+                current_line += delta['content']
 
     translated_current_line = await asyncify(translate)(current_line, src_lang='eng_Latn', tgt_lang='heb_Hebr')
     print(translated_current_line)
-    yield translated_current_line
+    yield f"data: {translated_current_line}"
 
 
 # if __name__ == "__main__":
