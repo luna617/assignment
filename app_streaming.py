@@ -26,7 +26,7 @@ app = FastAPI()
 
 @app.post("/summarize")
 async def summarize(message: Message):
-    translated_text = await translate(message.text, src_lang='heb_Hebr', tgt_lang='eng_Latn')
+    translated_text = translate(message.text, src_lang='heb_Hebr', tgt_lang='eng_Latn')
     print("Finished translating")
     message.text = f"Consider the following text: {translated_text}.\nA 5 points summary for the text is: "
     return StreamingResponse(five_points_summary(message), media_type='text/event-stream')
