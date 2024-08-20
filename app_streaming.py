@@ -7,8 +7,7 @@ from typing import Optional
 
 # import uvicorn
 
-
-class Message(BaseModel):
+class GenerationRequest(BaseModel):
     text: str
     temperature: float | None = 0.3
     max_tokens: Optional[float] = 100
@@ -25,11 +24,11 @@ app = FastAPI()
 
 
 @app.post("/summarize")
-async def summarize(message: Message):
-    translated_text = translate(message.text, src_lang='heb_Hebr', tgt_lang='eng_Latn')
+async def summarize(generation_request: GenerationRequest):
+    translated_text = translate(generation_request.text, src_lang='heb_Hebr', tgt_lang='eng_Latn')
     print("Finished translating")
-    message.text = f"Consider the following text: {translated_text}.\nA 5 points summary for the text is: "
-    return StreamingResponse(five_points_summary(message), media_type='text/event-stream')
+    generation_request.text = f"Consider the following text: {translated_text}.\nA 5 points summary for the text is: "
+    return StreamingResponse(five_points_summary(generation_request), media_type='text/event-stream')
 
 
 def translate(text: str, src_lang: str, tgt_lang: str):
@@ -37,16 +36,16 @@ def translate(text: str, src_lang: str, tgt_lang: str):
     return res
 
 
-async def five_points_summary(message: Message):
-    print(message)
-    res = instruct_model.create_chat_completion(
-        temperature=message.temperature,
-        max_tokens=message.max_tokens,
-        top_p=message.top_p,
+async def five_points_summary(generation_request: GenerationRequest):
+    print(generation_request)
+    res = generation_request.create_chat_completion(
+        temperature=generation_request.temperature,
+        max_tokens=generation_request.max_tokens,
+        top_p=generation_request.top_p,
         messages=[
             {
                 "role": "user",
-                "content": message.text
+                "content": generation_request.text
             }
         ],
         stream=True)
