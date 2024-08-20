@@ -3,7 +3,6 @@ from llama_cpp import Llama
 from transformers import pipeline
 from pydantic import BaseModel
 from fastapi.responses import StreamingResponse
-from typing import Optional
 from asyncer import asyncify
 
 # import uvicorn
@@ -19,9 +18,9 @@ class GenerationRequest(BaseModel):
 # stop = ["Q", "\n"]
 
 
-instruct_model = Llama(model_path=r"<MODEL_PATH>")
+instruct_model = Llama(model_path=r"<MODEL-PATH>")
 
-translation_model = pipeline("translation", model=r"<MODEL_PATH>", max_length=1000)
+translation_model = pipeline("translation", model=r"<MODEL-PATH>", max_length=1000)
 app = FastAPI()
 
 
