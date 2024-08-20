@@ -12,8 +12,8 @@ from asyncer import asyncify
 class GenerationRequest(BaseModel):
     text: str
     temperature: float | None = 0.3
-    max_tokens: Optional[float] = 1000
-    top_p: Optional[float] = 0.1
+    max_tokens: float | None = 1000
+    top_p: float | None = 0.1
 
 # echo = False
 # stop = ["Q", "\n"]
