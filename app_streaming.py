@@ -10,7 +10,7 @@ from typing import Optional
 
 class Message(BaseModel):
     text: str
-    temperature: Optional[float] = 0.3
+    temperature: float | None = 0.3
     max_tokens: Optional[float] = 100
     top_p: Optional[float] = 0.1
 
