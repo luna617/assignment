@@ -14,4 +14,4 @@ response = requests.post(url, headers={'Content-Type': 'application/json'}, json
 
 for chunk in response.iter_content(chunk_size=10000):
     if chunk:
-        print(chunk.decode("utf-8"))
+        print(chunk.decode("utf-8")[5:])  # parsing the data: prefix
