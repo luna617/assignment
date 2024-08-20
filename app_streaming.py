@@ -68,13 +68,11 @@ async def five_points_summary(generation_request: GenerationRequest):
             print(delta['content'])
             if delta['content'].endswith('\n'):
                 translated_current_line = await asyncify(translate)(current_line, src_lang='eng_Latn', tgt_lang='heb_Hebr')
-                # translated_current_line = translate(current_line, src_lang='eng_Latn', tgt_lang='heb_Hebr')
                 print(translated_current_line)
                 yield translated_current_line
                 current_line = ""
 
     translated_current_line = await asyncify(translate)(current_line, src_lang='eng_Latn', tgt_lang='heb_Hebr')
-    # translated_current_line = translate(current_line, src_lang='eng_Latn', tgt_lang='heb_Hebr')
     print(translated_current_line)
     yield translated_current_line
 
